@@ -11,7 +11,7 @@ internal class Program
         
         foreach (string word in stringToWords)
         {
-            if (dengerousWords.Contains(word.ToLower()) || dengerousWords.Contains(word.ToLower() + "s"))
+            if (dengerousWords.Contains(word.ToLower()) || dengerousWords.Contains(word[..^1].ToLower()))
             {
                 conterWords += 1;
                 if (!WordsAppearing.Contains(word))
