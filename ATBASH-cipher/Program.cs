@@ -2,7 +2,7 @@ namespace ATBASH_cipher;
 
 internal class Program
 {
-    static object CalculateDangerousWords(string input)
+    static int CalculateDangerousWords(string input)
     {
         string[] dengerousWords = { "bomb", "nukhba", "fighter", "rocket", "secret" };
         string[] stringToWords = input.Split(new char[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
@@ -23,7 +23,28 @@ internal class Program
         System.Console.WriteLine($"Words Appearing: {string.Join(", ", WordsAppearing)}");
         System.Console.WriteLine($"Number of Points: {conterWords}");
         return conterWords;
-    } 
+    }
+    
+    static string AddWarning(string decryptedInput, int points)
+    {
+        string warningLevel = "";
+        switch (points)
+        {
+            case > 0 and <= 5:
+                warningLevel += "WARNING";
+                break;
+            case > 5 and <= 10:
+                warningLevel += "DANGER!";
+                break;
+            case > 10 and <= 15:
+                warningLevel += "ULTRA ALERT!";
+                break;
+            default:
+                warningLevel += "NO THREAT DETECTED";
+                break;
+        }
+        return $"\nStatus report:\n\n- Decrypted message:\n{decryptedInput}\n\n- Warning level:{warningLevel}\n\n-Number of threat points: {points}";
+    }
 
     /// <summary>
     /// Decrypting string using ATBASH cipher.
@@ -58,8 +79,9 @@ Dv nfhg hgzb srwwvm zmw pvvk gsv kozm hvxivg fmgro gsv ozhg nlnvmg.
 Erxglib rh mvzi. Hgzb ivzwb.";
 
         Console.WriteLine($"before encreyption:\n{encryptedMessage}\n");
-        CalculateDangerousWords(Decrypt(encryptedMessage));
-        Console.WriteLine($"after decryption:\n{Decrypt(encryptedMessage)}");
+        string decryptedMessage = Decrypt(encryptedMessage);
+        int threatPoint = CalculateDangerousWords(decryptedMessage);
+        Console.WriteLine(AddWarning(decryptedMessage, threatPoint));
     }
     
 }
