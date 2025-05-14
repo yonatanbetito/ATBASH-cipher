@@ -1,7 +1,30 @@
-﻿namespace ATBASH_cipher;
+namespace ATBASH_cipher;
 
 internal class Program
 {
+    static object CalculateDangerousWords(string input)
+    {
+        string[] dengerousWords = { "bomb", "nukhba", "fighter", "rocket", "secret" };
+        string[] stringToWords = input.Split(new char[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        int conterWords = 0;
+        List<string> WordsAppearing = new List<string>();
+        
+        foreach (string word in stringToWords)
+        {
+            if (dengerousWords.Contains(word.ToLower()) || dengerousWords.Contains(word.ToLower() + "s"))
+            {
+                conterWords += 1;
+                if (!WordsAppearing.Contains(word))
+                    WordsAppearing.Add(word);
+            }
+        }
+
+        
+        System.Console.WriteLine($"Words Appearing: {string.Join(", ", WordsAppearing)}");
+        System.Console.WriteLine($"Number of Points: {conterWords}");
+        return conterWords;
+    } 
+
     /// <summary>
     /// Decrypting string using ATBASH cipher.
     /// </summary>
@@ -35,6 +58,8 @@ Dv nfhg hgzb srwwvm zmw pvvk gsv kozm hvxivg fmgro gsv ozhg nlnvmg.
 Erxglib rh mvzi. Hgzb ivzwb.";
 
         Console.WriteLine($"before encreyption:\n{encryptedMessage}\n");
+        CalculateDangerousWords(Decrypt(encryptedMessage));
         Console.WriteLine($"after decryption:\n{Decrypt(encryptedMessage)}");
     }
+    
 }
