@@ -1,8 +1,7 @@
-﻿namespace ATBASH_cipher;
+namespace ATBASH_cipher;
 
 internal class Program
 {
-    
     static object CalculateDangerousWords(string input)
     {
         string[] dengerousWords = { "bomb", "nukhba", "fighter", "rocket", "secret" };
@@ -25,10 +24,42 @@ internal class Program
         System.Console.WriteLine($"Number of Points: {conterWords}");
         return conterWords;
     } 
+
+    /// <summary>
+    /// Decrypting string using ATBASH cipher.
+    /// </summary>
+    /// <param name="message">The string to decrypt</param>
+    /// <returns>the decrypted string.</returns>
+    static string Decrypt(string message)
+    {
+        string result = "";
+        foreach (char character in message)
+        {
+            if (char.IsLetter(character))
+            {
+                char baseChar = char.IsUpper(character) ? 'A' : 'a';
+                char decryptedChar = (char)(baseChar + ('Z' - char.ToUpper(character)));
+                result += char.IsUpper(character) ? decryptedChar : char.ToLower(decryptedChar);
+            }
+            else
+                result += character;
+        }
+        return result;
+    }
+
     static void Main(string[] args)
     {
-        CalculateDangerousWords(
-            "Our forces are preparing for a major attack on the Zionist enemy.\nThe rocket units are ready and waiting for the signal.\nBombs have been placed near key locations.\nNukhba fighters are standing by for ground infiltration.\nThe attack will be sudden and strong -- they won't see it coming.\nWe must stay hidden and keep the plan secret until the last moment.\nVictory is near. Stay ready.");
+        string encryptedMessage = @"Lfi ulixvh ziv kivkzirmt uli z nzqli zggzxp lm gsv Arlmrhg vmvnb.
+Gsv ilxpvg fmrgh ziv ivzwb zmw dzrgrmt uli gsv hrtmzo.
+Ylnyh szev yvvm kozxvw mvzi pvb olxzgrlmh.
+Mfpsyz urtsgvih ziv hgzmwrmt yb uli tilfmw rmurogizgrlm.
+Gsv zggzxp droo yv hfwwvm zmw hgilmt -- gsvb dlm’g hvv rg xlnrmt.
+Dv nfhg hgzb srwwvm zmw pvvk gsv kozm hvxivg fmgro gsv ozhg nlnvmg.
+Erxglib rh mvzi. Hgzb ivzwb.";
+
+        Console.WriteLine($"before encreyption:\n{encryptedMessage}\n");
+        CalculateDangerousWords(Decrypt(encryptedMessage));
+        Console.WriteLine($"after decryption:\n{Decrypt(encryptedMessage)}");
     }
     
 }
