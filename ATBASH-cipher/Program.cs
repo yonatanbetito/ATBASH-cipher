@@ -2,15 +2,22 @@ namespace ATBASH_cipher;
 
 internal class Program
 {
-    static int CalculateDangerousWords(string input)
+    /// <summary>
+    /// Detecting dengerous words in the input message, and calculates the number of threat points.
+    /// </summary>
+    /// <param name="input">The decrypted input message.</param>
+    /// <returns>The number of threat points.</returns>
+    static int DetectDangerousWords(string input)
     {
-        string[] dengerousWords = { "bomb", "nukhba", "fighter", "rocket", "secret" };
-        string[] stringToWords = input.Split(new char[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] dengerousWords = ["bomb", "nukhba", "fighter", "rocket", "secret"];
+        string[] stringToWords = input.Split([' ', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
         int conterWords = 0;
-        List<string> WordsAppearing = new List<string>();
+        List<string> WordsAppearing = [];
         
         foreach (string word in stringToWords)
         {
+            // Checking if dangerous words apearing in the message,
+            // also in uppercase letters or in plural form.
             if (dengerousWords.Contains(word.ToLower()) || dengerousWords.Contains(word[..^1].ToLower()))
             {
                 conterWords += 1;
@@ -24,25 +31,23 @@ internal class Program
         System.Console.WriteLine($"Number of Points: {conterWords}");
         return conterWords;
     }
-    
-    static string AddWarning(string decryptedInput, int points)
+
+    /// <summary>
+    /// Summering the analysis on the input to a string of status report.
+    /// Adding warning according to the sum of the threat point.
+    /// </summary>
+    /// <param name="decryptedInput">The decrypted input string.</param>
+    /// <param name="points">Number of threat points detected.</param>
+    /// <returns>The status report.</returns>
+    static string ReportStatus(string decryptedInput, int points)
     {
-        string warningLevel = "";
-        switch (points)
+        string warningLevel = points switch
         {
-            case > 0 and <= 5:
-                warningLevel += "WARNING";
-                break;
-            case > 5 and <= 10:
-                warningLevel += "DANGER!";
-                break;
-            case > 10 and <= 15:
-                warningLevel += "ULTRA ALERT!";
-                break;
-            default:
-                warningLevel += "NO THREAT DETECTED";
-                break;
-        }
+            > 0 and <= 5 => "WARNING",
+            > 5 and <= 10 => "DANGER!",
+            > 10 and <= 15 => "ULTRA ALERT!",
+            _ => "NO THREAT DETECTED",
+        };
         return $"\nStatus report:\n\n- Decrypted message:\n{decryptedInput}\n\n- Warning level:{warningLevel}\n\n-Number of threat points: {points}";
     }
 
@@ -68,6 +73,10 @@ internal class Program
         return result;
     }
 
+    /// <summary>
+    /// Main with the test cases for the decrypting system.
+    /// </summary>
+    /// <param name="args">Arguments from the user.</param>
     static void Main(string[] args)
     {
         string encryptedMessage = @"Lfi ulixvh ziv kivkzirmt uli z nzqli zggzxp lm gsv Arlmrhg vmvnb.
@@ -78,10 +87,10 @@ Gsv zggzxp droo yv hfwwvm zmw hgilmt -- gsvb dlm’g hvv rg xlnrmt.
 Dv nfhg hgzb srwwvm zmw pvvk gsv kozm hvxivg fmgro gsv ozhg nlnvmg.
 Erxglib rh mvzi. Hgzb ivzwb.";
 
-        Console.WriteLine($"before encreyption:\n{encryptedMessage}\n");
+        Console.WriteLine($"Before decryption:\n{encryptedMessage}\n");
         string decryptedMessage = Decrypt(encryptedMessage);
-        int threatPoint = CalculateDangerousWords(decryptedMessage);
-        Console.WriteLine(AddWarning(decryptedMessage, threatPoint));
+        int threatPoint = DetectDangerousWords(decryptedMessage);
+        Console.WriteLine(ReportStatus(decryptedMessage, threatPoint));
     }
     
 }
